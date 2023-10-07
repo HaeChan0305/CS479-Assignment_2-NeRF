@@ -150,7 +150,7 @@ cython_debug/
 .vscode
 
 # Hydra logs
-#outputs
+outputs/2023-10-07/09-51-57/ckpt/
 
 # Data
 data/*
