@@ -23,7 +23,7 @@ def init_torch(cfg: DictConfig):
     Initializes PyTorch with the given configuration.
     """
     # set random seed for PyTorch
-    torch.manual_seed(42)
+    torch.manual_seed(24)
 
     # restrict the number of threads used by the current process
     torch.set_num_threads(1)

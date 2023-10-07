@@ -33,9 +33,22 @@ class NeRF(nn.Module):
         Constructor of class 'NeRF'.
         """
         super().__init__()
-
+        
         # TODO
-        raise NotImplementedError("Task 1")
+        self.relu = nn.ReLU()
+        self.sigmoid = nn.Sigmoid()
+        self.fc1 = nn.Linear(pos_dim, feat_dim)
+        self.fc2 = nn.Linear(feat_dim, feat_dim)
+        self.fc3 = nn.Linear(feat_dim, feat_dim)
+        self.fc4 = nn.Linear(feat_dim, feat_dim)
+        self.fc5 = nn.Linear(feat_dim, feat_dim)
+        self.fc6 = nn.Linear(feat_dim + pos_dim, feat_dim)
+        self.fc7 = nn.Linear(feat_dim, feat_dim)
+        self.fc8 = nn.Linear(feat_dim, feat_dim)
+        self.fc9 = nn.Linear(feat_dim, feat_dim)
+        self.fc_additional = nn.Linear(feat_dim, 1)
+        self.fc10 = nn.Linear(feat_dim + view_dir_dim, feat_dim//2)
+        self.fc11 = nn.Linear(feat_dim//2, 3)
 
     @jaxtyped
     @typechecked
@@ -60,4 +73,40 @@ class NeRF(nn.Module):
         """
 
         # TODO
-        raise NotImplementedError("Task 1")
+        x = self.fc1(pos)
+        x = self.relu(x)
+        
+        x = self.fc2(x)
+        x = self.relu(x)
+        
+        x = self.fc3(x)
+        x = self.relu(x)
+        
+        x = self.fc4(x)
+        x = self.relu(x)
+        
+        x = self.fc5(x)
+        x = self.relu(x)
+        
+        x = torch.cat((x, pos), -1)
+        x = self.fc6(x)
+        x = self.relu(x)
+        
+        x = self.fc7(x)
+        x = self.relu(x)
+        
+        x = self.fc8(x)
+        x = self.relu(x)
+        
+        x = self.fc9(x)
+        sigma = self.fc_additional(x)
+        sigma = self.relu(sigma)
+        x = torch.cat((x, view_dir), -1)
+        
+        x = self.fc10(x)
+        x = self.relu(x)
+        
+        x = self.fc11(x)
+        radiance = self.sigmoid(x)
+    
+        return (sigma, radiance)
